@@ -30,7 +30,7 @@ func retrieveTableauToken() ([]byte, error) {
 	jsonRequest, err := generateTableauRequest()
 
 	if err != nil {
-		// TODO: Handle errors.
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonRequest))
@@ -41,7 +41,7 @@ func retrieveTableauToken() ([]byte, error) {
 	response, err := client.Do(request)
 
 	if err != nil {
-		// TODO: Handle errors.
+		return nil, err
 	}
 
 	defer response.Body.Close()
@@ -49,7 +49,7 @@ func retrieveTableauToken() ([]byte, error) {
 	data, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		// TODO: Handle errors.
+		return nil, err
 	}
 
 	return data, nil
@@ -70,7 +70,7 @@ func generateTableauRequest() ([]byte, error) {
 	jsonRequest, err := json.Marshal(request)
 
 	if err != nil {
-		// TODO: Handle errors.
+		return nil, err
 	}
 
 	return jsonRequest, nil
