@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"./tableau"
 )
 
 func main() {
@@ -25,7 +27,7 @@ func handlerFunction(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Tabeleau request.
-	token, err := retrieveTableauToken()
+	token, err := tableau.RetrieveToken()
 
 	// Handle error on Tableau Request.
 	if err != nil {
