@@ -11,7 +11,20 @@ import (
 
 func main() {
 	http.HandleFunc("/", handlerFunction)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+
+	address := os.Getenv("TB_ADDRESS")
+	crt := os.Getenv("TB_TLS_CRT")
+	key := os.Getenv("TB_TLS_KEY")
+
+	if len(address) <= 0 {
+		address = ":8080"
+	}
+
+	if len(crt) > 0 && len(key) > 0 {
+		log.Fatal(http.ListenAndServeTLS(address, crt, key, nil))
+	} else {
+		log.Fatal(http.ListenAndServe(address, nil))
+	}
 }
 
 func handlerFunction(w http.ResponseWriter, req *http.Request) {
