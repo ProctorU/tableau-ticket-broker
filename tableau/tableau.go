@@ -27,7 +27,7 @@ type Site struct {
 
 // RetrieveToken is used to retrieve the TableauToken
 func RetrieveToken() ([]byte, error) {
-	url := os.Getenv("TABLEAU_BASE_URL") + "/api/3.1/auth/signin"
+	url := os.Getenv("TB_TABLEAU_BASE_URL") + "/api/3.1/auth/signin"
 	p := generatePayload()
 	j, err := json.Marshal(p)
 
@@ -60,8 +60,8 @@ func RetrieveToken() ([]byte, error) {
 func generatePayload() Payload {
 	return Payload{
 		Credentials: Credentials{
-			Name:     os.Getenv("TABLEAU_NAME"),
-			Password: os.Getenv("TABLEAU_PASSWORD"),
+			Name:     os.Getenv("TB_TABLEAU_USERNAME"),
+			Password: os.Getenv("TB_TABLEAU_PASSWORD"),
 			Site: Site{
 				ContentURL: "",
 			},

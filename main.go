@@ -43,7 +43,7 @@ func handlerFunction(w http.ResponseWriter, req *http.Request) {
 
 func authorizeRequest(token string) error {
 	// Pull token from env (valid token).
-	validToken := os.Getenv("TABLEAU_SERVER_TOKEN")
+	validToken := os.Getenv("TB_API_TOKEN")
 
 	if token != validToken {
 		return errors.New("invalid token")
