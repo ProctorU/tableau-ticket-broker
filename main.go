@@ -76,7 +76,7 @@ func authorizeRequest(token string) error {
 	validToken := os.Getenv("TB_API_TOKEN")
 
 	if token != validToken {
-		return errors.New("invalid token")
+		return errors.New("invalid authorization token")
 	}
 
 	return nil
