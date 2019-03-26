@@ -61,7 +61,7 @@ func handlerFunction(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if string(token) == "-1" {
-		http.Error(w, `{"error":"could not find username in tableau"}`, http.StatusBadRequest)
+		http.Error(w, `{"error":"could not find username in tableau"}`, http.StatusNotFound)
 		return
 	}
 
