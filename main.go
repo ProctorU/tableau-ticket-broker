@@ -67,7 +67,7 @@ func handlerFunction(w http.ResponseWriter, req *http.Request) {
 
 	// Return response.
 	w.WriteHeader(http.StatusOK)
-	body := []byte(fmt.Sprintf(`{"token":"%q"}`, token))
+	body := []byte(fmt.Sprintf(`{"token":"%s"}`, token))
 	w.Write(body)
 }
 
