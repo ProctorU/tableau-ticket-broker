@@ -1,0 +1,15 @@
+[Unit]
+Description=Tableau Ticket Broker
+After=network.target
+ 
+[Service]
+Type=simple
+
+Restart=always
+
+EnvironmentFile=/etc/ticket-broker/env
+
+ExecStart=/usr/local/bin/ticket-broker
+
+[Install]
+WantedBy=multi-user.target
