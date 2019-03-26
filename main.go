@@ -38,7 +38,7 @@ func handlerFunction(w http.ResponseWriter, req *http.Request) {
 	usernames, ok := req.URL.Query()["username"]
 
 	if !ok || len(usernames[0]) <= 0 {
-		http.Error(w, `{"error":"Mising param username"}`, http.StatusBadRequest)
+		http.Error(w, `{"error":"mising param username"}`, http.StatusBadRequest)
 		return
 	}
 	username := usernames[0]
