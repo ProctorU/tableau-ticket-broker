@@ -8,13 +8,13 @@ import (
 )
 
 func TestStatusHandler(t *testing.T) {
-    req, err := http.NewRequest("GET", "/status", nil)
+    req, err := http.NewRequest("GET", "/healthz", nil)
     if err != nil {
         t.Fatal(err)
     }
 
     rr := httptest.NewRecorder()
-    handler := http.HandlerFunc(statusHandler)
+    handler := http.HandlerFunc(healthHandler)
 
     handler.ServeHTTP(rr, req)
     if status := rr.Code; status != http.StatusOK {

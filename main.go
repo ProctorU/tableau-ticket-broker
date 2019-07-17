@@ -16,7 +16,7 @@ var RUNNING_SINCE = time.Now().UTC()
 
 func main() {
 	http.HandleFunc("/", handlerFunction)
-	http.HandleFunc("/status", statusHandler)
+	http.HandleFunc("/healthz", healthHandler)
 
 	address := os.Getenv("TB_ADDRESS")
 	crt := os.Getenv("TB_TLS_CRT")
@@ -33,7 +33,7 @@ func main() {
 	}
 }
 
-func statusHandler(w http.ResponseWriter, req *http.Request) {
+func healthHandler(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	w.WriteHeader(http.StatusOK)
