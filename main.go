@@ -7,13 +7,16 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 var VERSION string = ""
 var BUILD string = ""
+var RUNNING_SINCE = time.Now().UTC()
 
 func main() {
 	http.HandleFunc("/", handlerFunction)
+	http.HandleFunc("/healthz", healthHandler)
 
 	address := os.Getenv("TB_ADDRESS")
 	crt := os.Getenv("TB_TLS_CRT")
@@ -28,6 +31,14 @@ func main() {
 	} else {
 		log.Fatal(http.ListenAndServe(address, nil))
 	}
+}
+
+func healthHandler(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	w.WriteHeader(http.StatusOK)
+	body := []byte(fmt.Sprintf(`{"status":"ok","running_since":"%v"}`, RUNNING_SINCE))
+	w.Write(body)
 }
 
 func handlerFunction(w http.ResponseWriter, req *http.Request) {
