@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -15,8 +16,6 @@ var BUILD string = ""
 var RUNNING_SINCE = time.Now().UTC()
 
 func main() {
-	http.HandleFunc("/", handlerFunction)
-	http.HandleFunc("/healthz", healthHandler)
 
 	address := os.Getenv("TB_ADDRESS")
 	crt := os.Getenv("TB_TLS_CRT")
@@ -26,8 +25,40 @@ func main() {
 		address = ":8080"
 	}
 
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handlerFunction)
+	mux.HandleFunc("/healthz", healthHandler)
+
+	cfg := &tls.Config{
+		MinVersion: tls.VersionTLS12,
+		CurvePreferences: []tls.CurveID{
+			tls.CurveP521,
+			tls.CurveP384,
+			tls.CurveP256,
+		},
+		PreferServerCipherSuites: true,
+		CipherSuites: []uint16{
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_RSA_WITH_AES_256_CBC_SHA,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+			tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_RSA_WITH_AES_128_CBC_SHA256,
+			tls.TLS_RSA_WITH_AES_128_CBC_SHA,
+		},
+	}
+	srv := &http.Server{
+		Addr:         address,
+		Handler:      mux,
+		TLSConfig:    cfg,
+		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
+	}
+
 	if len(crt) > 0 && len(key) > 0 {
-		log.Fatal(http.ListenAndServeTLS(address, crt, key, nil))
+		log.Fatal(srv.ListenAndServeTLS(crt, key))
 	} else {
 		log.Fatal(http.ListenAndServe(address, nil))
 	}
